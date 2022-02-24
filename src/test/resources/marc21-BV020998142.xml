@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mx:record xmlns:mx="http://www.loc.gov/MARC21/slim" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="mrc_9148313" xsi:schemaLocation="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
+  <mx:leader>02459nam a2200024 c 4500</mx:leader>
+  <mx:controlfield tag="001">9148313</mx:controlfield>
+  <mx:controlfield tag="005">20220207</mx:controlfield>
+  <mx:controlfield tag="007">ta</mx:controlfield>
+  <mx:controlfield tag="008">051227s1910uuuu|||a|| | |||||||||||ger||</mx:controlfield>
+  <mx:datafield tag="035" ind1=" " ind2=" ">
+    <mx:subfield code="a">(OCoLC)162244133</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="035" ind1=" " ind2=" ">
+    <mx:subfield code="a">(DE-604)BV020998142</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="035" ind1=" " ind2=" ">
+    <mx:subfield code="a">(DE-599)BVBBV020998142</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="041" ind1="0" ind2=" ">
+    <mx:subfield code="a">ger</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="110" ind1="2" ind2=" ">
+    <mx:subfield code="a">A. Siebel Bauartikelfabrik (Düsseldorf)</mx:subfield>
+    <mx:subfield code="0">(DE-588)3043711-8</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="119" ind1="2" ind2=" ">
+    <mx:subfield code="a">Siebel Bauartikelfabrik, A. (Düsseldorf)</mx:subfield>
+    <mx:subfield code="a">Bauartikelfabrik A. Siebel (Düsseldorf)</mx:subfield>
+    <mx:subfield code="0">(DE-588)3043711-8</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="245" ind1="0" ind2="0">
+    <mx:subfield code="a">Das zerlegbare Holzhaus (System Siebel) in seinen verschiedenen Anwendungsarten für öffentliche, gewerbliche, private und sportliche Zwecke</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="246" ind1="1" ind2="3">
+    <mx:subfield code="a">Zerlegbare Bauten</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="264" ind1=" " ind2="1">
+    <mx:subfield code="a">Düsseldorf-Rath u. Metz</mx:subfield>
+    <mx:subfield code="b">Selbstverl. der Firma Bauartikel-Fabrik A. Siebel</mx:subfield>
+    <mx:subfield code="c">[ca. 1910]</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="264" ind1=" " ind2="3">
+    <mx:subfield code="a">Düsseldorf</mx:subfield>
+    <mx:subfield code="b">Fr. Dietz</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="300" ind1=" " ind2=" ">
+    <mx:subfield code="a">80 S., 1 Plan</mx:subfield>
+    <mx:subfield code="b">zahlr. Ill.</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="336" ind1=" " ind2=" ">
+    <mx:subfield code="a">Text</mx:subfield>
+    <mx:subfield code="b">txt</mx:subfield>
+    <mx:subfield code="2">rdacontent</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="337" ind1=" " ind2=" ">
+    <mx:subfield code="a">ohne Hilfsmittel zu benutzen</mx:subfield>
+    <mx:subfield code="b">n</mx:subfield>
+    <mx:subfield code="2">rdamedia</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="338" ind1=" " ind2=" ">
+    <mx:subfield code="a">Band</mx:subfield>
+    <mx:subfield code="b">nc</mx:subfield>
+    <mx:subfield code="2">rdacarrier</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="500" ind1=" " ind2=" ">
+    <mx:subfield code="a">Umschlagtitel: Zerlegbare Bauten</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="650" ind1="0" ind2="7">
+    <mx:subfield code="a">Holz</mx:subfield>
+    <mx:subfield code="0">(DE-588)4025668-6</mx:subfield>
+    <mx:subfield code="0">(DE-12)9302</mx:subfield>
+    <mx:subfield code="2">gnd</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="650" ind1="0" ind2="7">
+    <mx:subfield code="a">Baustoff</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+    <mx:subfield code="0">(DE-12)1740</mx:subfield>
+    <mx:subfield code="2">gnd</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="650" ind1="0" ind2="7">
+    <mx:subfield code="a">Architektur</mx:subfield>
+    <mx:subfield code="0">(DE-588)4002851-3</mx:subfield>
+    <mx:subfield code="0">(DE-12)993</mx:subfield>
+    <mx:subfield code="2">gnd</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Wood</mx:subfield>
+    <mx:subfield code="0">(DE-588)4025668-6</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Bois</mx:subfield>
+    <mx:subfield code="0">(DE-588)4025668-6</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Building materials</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Construction -- Matériaux</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Architecture</mx:subfield>
+    <mx:subfield code="0">(DE-588)4002851-3</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="688" ind1=" " ind2=" ">
+    <mx:subfield code="a">Architecture</mx:subfield>
+    <mx:subfield code="0">(DE-588)4002851-3</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="689" ind1="0" ind2="1">
+    <mx:subfield code="A">s</mx:subfield>
+    <mx:subfield code="a">Holz</mx:subfield>
+    <mx:subfield code="0">(DE-588)4025668-6</mx:subfield>
+    <mx:subfield code="0">(DE-12)9302</mx:subfield>
+    <mx:subfield code="5">(DE-101)</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="689" ind1="0" ind2="2">
+    <mx:subfield code="A">s</mx:subfield>
+    <mx:subfield code="a">Baustoff</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+    <mx:subfield code="0">(DE-12)1740</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="689" ind1="0" ind2="3">
+    <mx:subfield code="A">s</mx:subfield>
+    <mx:subfield code="a">Architektur</mx:subfield>
+    <mx:subfield code="0">(DE-588)4002851-3</mx:subfield>
+    <mx:subfield code="0">(DE-12)993</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Hölzer</mx:subfield>
+    <mx:subfield code="0">(DE-588)4025668-6</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Baumaterial</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Baubedarf</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Baustoffe</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Baumaterialien</mx:subfield>
+    <mx:subfield code="0">(DE-588)4004945-0</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="690" ind1=" " ind2=" ">
+    <mx:subfield code="a">Baukunst</mx:subfield>
+    <mx:subfield code="0">(DE-588)4002851-3</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="776" ind1="1" ind2="8">
+    <mx:subfield code="i">Elektronische Reproduktion</mx:subfield>
+    <mx:subfield code="d">München : Bayerische Staatsbibliothek, 2022</mx:subfield>
+    <mx:subfield code="o">urn:nbn:de:bvb:12-bsb00140164-7</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="856" ind1="4" ind2="1">
+    <mx:subfield code="u">http://mdz-nbn-resolving.de/urn:nbn:de:bvb:12-bsb00140164-7</mx:subfield>
+    <mx:subfield code="x">Resolving-System</mx:subfield>
+    <mx:subfield code="z">kostenfrei</mx:subfield>
+    <mx:subfield code="3">Volltext // Exemplar mit der Signatur: München, Bayerische Staatsbibliothek -- A.civ. 211 r</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="912" ind1=" " ind2=" ">
+    <mx:subfield code="a">digit</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="940" ind1="1" ind2=" ">
+    <mx:subfield code="q">BSBQK0152</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="980" ind1="4" ind2=" ">
+    <mx:subfield code="a">48974249</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="982" ind1=" " ind2=" ">
+    <mx:subfield code="a">A.civ. 211 r</mx:subfield>
+  </mx:datafield>
+  <mx:datafield tag="983" ind1=" " ind2=" ">
+    <mx:subfield code="D">17.01.2006</mx:subfield>
+    <mx:subfield code="b">0</mx:subfield>
+    <mx:subfield code="j">A.civ. 211 r</mx:subfield>
+    <mx:subfield code="p">36630723420018</mx:subfield>
+    <mx:subfield code="t">21</mx:subfield>
+    <mx:subfield code="u">1</mx:subfield>
+  </mx:datafield>
+</mx:record>
