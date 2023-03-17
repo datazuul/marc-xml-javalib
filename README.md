@@ -1,12 +1,12 @@
 # MARC-XML Java Library
 
-A Java library for getting easily metadata from a MARC21-XML source without knowing the insides of MARC standard.
+A Java library for getting easily metadata from a MARC21-XML source without knowing the insides of [MARCXML standard](https://www.loc.gov/standards/marcxml/).
 
 ## Usage
 
 Create an instance of `MarcXml`:
 
-## from an input stream
+### from an input stream
 
 ```
 InputStream is = ...;
@@ -15,7 +15,7 @@ MarcXml marcXml = new MarcXml(record);
 String dcDate = marcXml.getDCDate();
 ```
 
-## from an URI:
+### from an URI:
 
 ```
 URI uri = ...;
@@ -23,6 +23,11 @@ Record record = MarcXmlRecord.from(uri);
 MarcXml marcXml = new MarcXml(record);
 String dcDate = marcXml.getDCDate();
 ```
+
+## Documentation
+
+* [MARC 21 Format for Bibliographic Data](https://www.loc.gov/marc/bibliographic/)
+* Extracting Dublin Core fields following the XSL-Transformation [MARCXML to OAI Encoded Simple Dublin Core Stylesheet](https://www.loc.gov/standards/marcxml/xslt/MARC21slim2OAIDC.xsl)
 
 ## Tests
 
