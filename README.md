@@ -26,11 +26,14 @@ MarcXml marcXml = new MarcXml(record);
 
 TODO
 
-3. Convert to other standard object (e.g. DublinCore):
+3. Convert to other standard object (e.g. DublinCore) and get metadata:
 
 ```
 DublinCore dc = marcXml.toDublinCore();
+
 List<String> dcDates = dc.getDates();
+String dcLanguage = dc.getLanguage();
+List<String> dcPublishers = dc.getPublishers();
 ```
 
 ## Documentation
