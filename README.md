@@ -22,17 +22,23 @@ Record record = MarcXmlRecord.from(uri);
 MarcXml marcXml = new MarcXml(record);
 ```
 
-2. Read metadata of interest (e.g. DCDate):
+2. Read metadata of interest:
+
+TODO
+
+3. Convert to other standard object (e.g. DublinCore):
 
 ```
-String dcDate = marcXml.getDCDate();
+DublinCore dc = marcXml.toDublinCore();
+Date dcDate = dc.getDate();
 ```
 
 ## Documentation
 
+* [MARC 21 Formats](https://www.loc.gov/marc/marcdocz.html)
 * [MARC 21 Format for Bibliographic Data](https://www.loc.gov/marc/bibliographic/)
-* Extracting Dublin Core fields following the XSL-Transformation [MARCXML to OAI Encoded Simple Dublin Core Stylesheet](https://www.loc.gov/standards/marcxml/xslt/MARC21slim2OAIDC.xsl)
 * Documentation for Dublin Core see [DCMI Metadata Terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)
+* Extracting Dublin Core fields following the XSL-Transformation [MARCXML to OAI Encoded Simple Dublin Core Stylesheet](https://www.loc.gov/standards/marcxml/xslt/MARC21slim2OAIDC.xsl) and <http://www.loc.gov/standards/marcxml/xslt/MARC21slimUtils.xsl>
 
 ## Tests
 

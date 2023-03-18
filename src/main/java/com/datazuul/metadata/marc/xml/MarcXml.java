@@ -3,10 +3,14 @@ package com.datazuul.metadata.marc.xml;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
+
+import com.datazuul.metadata.dublincore.DublinCore;
+import com.datazuul.metadata.marc.xml.converter.MarcXml2DublinCore;
 
 /**
  * MARC standards: https://www.loc.gov/marc/<br>
@@ -15,12 +19,6 @@ import org.marc4j.marc.Subfield;
  * MARC-XML to Dublin Core: https://www.loc.gov/standards/marcxml/xslt/MARC21slim2OAIDC.xsl and http://www.loc.gov/standards/marcxml/xslt/MARC21slimUtils.xsl
  */
 public class MarcXml {
-
-  private final Record record;
-
-  public MarcXml(Record record) {
-    this.record = record;
-  }
 
   public static String concatenate(List<Subfield> subfields, String delimiter) {
     StringBuilder sb = new StringBuilder();
@@ -32,6 +30,12 @@ public class MarcXml {
     }
     String result = sb.toString().trim();
     return result;
+  }
+
+  private final Record record;
+
+  public MarcXml(Record record) {
+    this.record = record;
   }
 
   /*
@@ -78,7 +82,7 @@ Regarding original records: I use 264 only and follow RDA compliance.
     String lang = data.substring(35, 38);
     return lang;
   }
-
+  
   public String getDCPublicationPlace() {
     List<DataField> dataFields = record.getDataFields();
     for (DataField dataField : dataFields) {
@@ -163,5 +167,14 @@ Regarding original records: I use 264 only and follow RDA compliance.
       }
     }
     return identifiers;
+  }
+
+  public Record getRecord() {
+    return record;
+  }
+
+  public DublinCore toDublinCore() {
+    MarcXml2DublinCore marcXml2DublinCore = new MarcXml2DublinCore(this);
+    return marcXml2DublinCore.convert();
   }
 }
