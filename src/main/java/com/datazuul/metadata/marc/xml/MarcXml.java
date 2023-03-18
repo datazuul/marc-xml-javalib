@@ -1,10 +1,11 @@
 package com.datazuul.metadata.marc.xml;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.marc4j.marc.ControlField;
 import org.marc4j.marc.DataField;
 import org.marc4j.marc.Record;
 import org.marc4j.marc.Subfield;
@@ -38,49 +39,33 @@ public class MarcXml {
     this.record = record;
   }
 
-  /*
-  "Information in field 260 is similar to information in field 264 (Production, Publication, Distribution, Manufacture, and Copyright Notice). Field 260 is useful for cases where the content standard or institutional policies used do not make a distinction between functions"
+  public String getControlFieldByTag(String tag) {
+	return record.getControlFields().stream().filter(cf -> tag.equals(cf.getTag())).findFirst().orElse(null).getData();
+  }
   
-  The 264 essentially replaced the 260 when RDA was implemented. You can read the PCC Guidelines.
-
-I wouldn't change the fields. For the most part, AACR2 records and RDA records should be able to co-exist in your ILS/discovery system.
+  public List<DataField> getDataFieldsByTag(String tag) {
+	List<DataField> dataFields = record.getDataFields();
+	List<DataField> matchingDataFields = dataFields.stream().filter(df -> tag.equals(df.getTag())).collect(Collectors.toList());
+    return matchingDataFields;
+  }
   
-  Regarding copy cataloging or managing old records: I usually try not to overwrite/delete data in my records, so if I have a 260 line but no 264, I'll add the 264 for RDA compliance and leave the 260 for consistency with the pre-RDA record. If I have a 264 and no 260, then I simply leave it as is because that's covering the more up to date requirement.
-
-Regarding original records: I use 264 only and follow RDA compliance.
-   */
-  public String getDCDate() {
-    String result = null;
+  public List<String> getSubfieldsByTagAndCode(String tag, String code) {
+	List<String> result = null;
     List<DataField> dataFields = record.getDataFields();
     for (DataField dataField : dataFields) {
-      if ("260".equals(dataField.getTag())) {
-        List<Subfield> subfields = dataField.getSubfields("c"); // $c - Date of publication, distribution, etc. (R)
-        result = concatenate(subfields, " ");
-      }
-    }
-    if (result == null || result.isBlank()) {
-      for (DataField dataField : dataFields) {
-        if ("264".equals(dataField.getTag())) {
-          List<Subfield> subfields = dataField.getSubfields("c"); // $c - Date of production, publication, distribution, manufacture, or copyright notice (R)
-          result = concatenate(subfields, " ");
+      if (tag.equals(dataField.getTag())) {
+        List<Subfield> subfields = dataField.getSubfields(code);
+        // inside one datafield: concatenate subfields data
+        String data = concatenate(subfields, " ");
+        
+        // add subfields data of datafield to list
+        if (result == null) {
+          result = new ArrayList<>();
         }
+        result.add(data);
       }
     }
     return result;
-  }
-
-  public String getDCLanguage() {
-    // language (dc:language): control field with tag 008
-    ControlField field = (ControlField) record.getVariableField("008");
-    String data = field.getData();
-
-    // the three-character MARC language code takes character positions 35-37
-    // Three-character alphabetic code that indicates the language of the item.
-    // Code from: MARC Code List for Languages (https://www.loc.gov/marc/languages/).
-    // Choice of a MARC code is based on the predominant language of the item.
-    // Three fill characters (|||) may also be used if no attempt is made to code the language or if non-MARC language coding is preferred (and coded in field 041 (Language code)).
-    String lang = data.substring(35, 38);
-    return lang;
   }
   
   public String getDCPublicationPlace() {
@@ -88,26 +73,6 @@ Regarding original records: I use 264 only and follow RDA compliance.
     for (DataField dataField : dataFields) {
       if ("260".equals(dataField.getTag())) {
         List<Subfield> subfields = dataField.getSubfields("a"); // $a - Place of publication, distribution, etc. (R)
-        return concatenate(subfields, " ");
-      }
-    }
-    return null;
-  }
-
-  /*
-  <xsl:for-each select="marc:datafield[@tag=260]">
-    <dc:publisher>
-      <xsl:call-template name="subfieldSelect">
-        <xsl:with-param name="codes">ab</xsl:with-param>
-      </xsl:call-template>
-    </dc:publisher>
-  </xsl:for-each>
-   */
-  public String getDCPublisher() {
-    List<DataField> dataFields = record.getDataFields();
-    for (DataField dataField : dataFields) {
-      if ("260".equals(dataField.getTag())) {
-        List<Subfield> subfields = dataField.getSubfields("b"); // $b - Name of publisher, distributor, etc. (R)
         return concatenate(subfields, " ");
       }
     }

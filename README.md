@@ -30,7 +30,7 @@ TODO
 
 ```
 DublinCore dc = marcXml.toDublinCore();
-Date dcDate = dc.getDate();
+List<String> dcDates = dc.getDates();
 ```
 
 ## Documentation
