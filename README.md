@@ -42,6 +42,6 @@ Tests are based
 
 ```
 "Arithmetic", Autor: Carl Sandburg; Ted Rand, Verlag: San Diego : Harcourt Brace Jovanovich, 1993
-``` 
+```
 
 * The Dublin Core representation of this book (<https://www.loc.gov/standards/marcxml/Sandburg/sandburgdc.xml>)
