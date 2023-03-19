@@ -1,10 +1,9 @@
 package com.datazuul.metadata.marc.xml.converter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import org.marc4j.marc.DataField;
-import org.marc4j.marc.Subfield;
+import java.util.stream.Collectors;
 
 import com.datazuul.metadata.dublincore.DublinCore;
 import com.datazuul.metadata.marc.xml.MarcXml;
@@ -22,8 +21,12 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
 
 	dc.setCreators(parseCreators());
 	dc.setDates(parseDates());
+	dc.setDescriptions(parseDescriptions());
+//	dc.setFormat(null);
+	dc.setIdentifiers(parseIdentifiers());
 	dc.setLanguage(parseLanguage());
 	dc.setPublishers(parsePublishers());
+	dc.setSubjects(null);
 	dc.setTitles(parseTitles());
 	dc.setType(parseType());
 
@@ -137,6 +140,113 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
 
   /**
    * <p>
+   * 520: https://www.loc.gov/marc/bibliographic/concise/bd520.html<br>
+   * Unformatted information that describes the scope and general contents of the materials.<br>
+   * This could be a summary, abstract, annotation, review, or only a phrase describing the material.<br>
+   * The level of detail appropriate in a summary may vary depending on the audience for a
+   * particular product. When a distinction between levels of detail is required, a brief summary
+   * is given in subfield $a and a fuller annotation is given in subfield $b.<br>
+   * The text is sometimes displayed and/or printed with an introductory term that is generated
+   * as a display constant based on the first indicator value.<br>
+   * $a - Summary, etc. (NR)
+   * 
+   * <p>
+   * 521: https://www.loc.gov/marc/bibliographic/concise/bd521.html<br>
+   * Information that identifies the specific audience or intellectual level for which the content of
+   * the described item is considered appropriate.<br>
+   * $a - Target audience note (R)
+   * 
+   * <pre>
+   * <xsl:for-each select="marc:datafield[@tag=520]">
+   *   <dc:description>
+   *     <xsl:value-of select="marc:subfield[@code='a']"/>
+   *   </dc:description>
+   * </xsl:for-each>
+   * <xsl:for-each select="marc:datafield[@tag=521]">
+   *   <dc:description>
+   *     <xsl:value-of select="marc:subfield[@code='a']"/>
+   *   </dc:description>
+   * </xsl:for-each>
+   * <xsl:for-each select="marc:datafield[500&lt;= @tag and @tag&lt;= 599 ][not(@tag=506 or @tag=530 or @tag=540 or @tag=546)]">
+   *   <dc:description>
+   *     <xsl:value-of select="marc:subfield[@code='a']"/>
+   *   </dc:description>
+   * </xsl:for-each>
+   * </pre>
+   */
+  private List<String> parseDescriptions() {
+	List<String> result = new ArrayList<>();
+	List<String> subfields520a = marcXml.getSubfieldsByTagAndCodes("520", "a");
+	if (subfields520a != null) {
+	  result.addAll(subfields520a);
+	}
+	List<String> subfields521a = marcXml.getSubfieldsByTagAndCodes("521", "a");
+	if (subfields521a != null) {
+	  result.addAll(subfields521a);
+	}
+	// also exclude 520 and 521 (differs from above xsl)
+	List<Integer> excludes = Arrays.asList(506, 520, 521, 530, 540, 546);
+	for (int i = 500; i <= 599; i++) {
+	  if (!excludes.contains(i)) {
+		List<String> subfieldData = marcXml.getSubfieldsByTagAndCodes("" +i, "a");
+		if (subfieldData != null) {
+		  result.addAll(subfieldData);
+		}
+	  }
+	}
+	if (result.isEmpty()) {
+	  return null;
+	}
+	return result;
+  }
+
+  /**
+   * <p>
+   * 856: https://www.loc.gov/marc/bibliographic/concise/bd856.html<br>
+   * $u - Uniform Resource Identifier (R)<br>
+    Uniform Resource Identifier (URI), which provides standard syntax for locating an object using existing Internet protocols or by resolution of a persistent identifier (PID). Field 856 is structured to allow for the creation of a URL from the concatenation of other separate 856 subfields. Subfield $u may be used instead of those separate subfields or in addition to them.
+    Subfield $u may be repeated if more than one URI is recorded.
+   * 
+   * <p>
+   * 020: https://www.loc.gov/marc/bibliographic/concise/bd020.html<br>
+   * $a - International Standard Book Number (NR)<br>
+   * Valid ISBN. ISBN and the embedded hyphens may be generated for display.
+   * 
+   * <pre>
+   * <xsl:for-each select="marc:datafield[@tag=856]">
+   *   <dc:identifier>
+   *     <xsl:value-of select="marc:subfield[@code='u']"/>
+   *   </dc:identifier>
+   * </xsl:for-each>
+   * <xsl:for-each select="marc:datafield[@tag=020]">
+   *   <dc:identifier>
+   *     <xsl:text>URN:ISBN:</xsl:text>
+   *     <xsl:value-of select="marc:subfield[@code='a']"/>
+   *   </dc:identifier>
+   * </xsl:for-each>
+   * </pre>
+   */
+  private List<String> parseIdentifiers() {
+	List<String> uris = marcXml.getSubfieldsByTagAndCodes("856", "u");
+	List<String> isbns = marcXml.getSubfieldsByTagAndCodes("020", "a");
+	if (isbns != null) {
+	  isbns = isbns.stream().map(i -> "URN:ISBN:" + i).collect(Collectors.toList());
+	}
+	List<String> result = null;
+	if (uris != null || isbns != null) {
+	  result = new ArrayList<>();
+	}
+	if (uris != null) {
+	  result.addAll(uris);
+	}
+	if (isbns != null) {
+	  result.addAll(isbns);
+	}
+	return result;
+  }
+
+  /**
+   * <p>
    * 008 all: https://www.loc.gov/marc/bibliographic/concise/bd008a.html
    * 
    * <p>
@@ -146,6 +256,11 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * predominant language of the item. Three fill characters (|||) may also be
    * used if no attempt is made to code the language or if only non-MARC language
    * coding is preferred (and coded in field 041 (Language code)).
+   * 
+   * <pre>
+   * <dc:language>
+   *   <xsl:value-of select="substring($controlField008,36,3)"/>
+   * </dc:language>
    */
   private String parseLanguage() {
 	String data = marcXml.getControlFieldByTag("008");

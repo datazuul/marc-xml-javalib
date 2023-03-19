@@ -40,6 +40,20 @@ class MarcXml2DublinCoreTest {
   }
 
   @Test
+  void testDescriptions() {
+	List<String> descriptions = dc.getDescriptions();
+	assertEquals(Arrays.asList(
+	    "A poem about numbers and their characteristics. Features anamorphic, or distorted, drawings which can be restored to normal by viewing from a particular angle or by viewing the image's reflection in the provided Mylar cone.",
+	    "One Mylar sheet included in pocket."), descriptions);
+  }
+
+  @Test
+  void testIdentifiers() {
+	List<String> identifiers = dc.getIdentifiers();
+	assertEquals(Arrays.asList("URN:ISBN:0152038655 :"), identifiers);
+  }
+
+  @Test
   void testLanguage() {
 	assertEquals("eng", dc.getLanguage());
   }
@@ -49,13 +63,13 @@ class MarcXml2DublinCoreTest {
 	List<String> publishers = dc.getPublishers();
 	assertEquals(Arrays.asList("San Diego : Harcourt Brace Jovanovich,"), publishers);
   }
-  
+
   @Test
   void testTitles() {
 	List<String> titles = dc.getTitles();
 	assertEquals(Arrays.asList("Arithmetic /"), titles);
   }
-  
+
   @Test
   void testType() {
 	String type = dc.getType();

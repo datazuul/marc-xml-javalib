@@ -60,6 +60,19 @@ public class DublinCore {
   private List<String> descriptions;
   
   /**
+   * <p><b>Definition:</b> An unambiguous reference to the resource within a given context.
+   * 
+   * <p><b>Comment:</b> Recommended practice is to identify the resource by means of a string
+   * conforming to an identification system. Examples include International Standard Book Number
+   * (ISBN), Digital Object Identifier (DOI), and Uniform Resource Name (URN).
+   * Persistent identifiers should be provided as HTTP URIs.
+   * 
+   * @see <a href="http://purl.org/dc/terms/identifier">http://purl.org/dc/terms/identifier</a>
+   * @see <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/identifier/">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/identifier/</a>
+   */
+  private List<String> identifiers;
+  
+  /**
    * <p><b>Definition:</b> A language of the resource.
    * 
    * <p><b>Comment:</b> Recommended practice is to use either a non-literal value
@@ -69,7 +82,7 @@ public class DublinCore {
    * @see <a href="http://purl.org/dc/terms/language">http://purl.org/dc/terms/language</a>
    */
   private String language;
-  
+
   /**
    * <p><b>Definition:</b> An entity responsible for making the resource available.
    * 
@@ -77,7 +90,7 @@ public class DublinCore {
    * @see <a href="http://purl.org/dc/terms/Agent">http://purl.org/dc/terms/Agent</a>
    */
   private List<String> publishers;
-  
+
   /**
    * <p><b>Definition:</b> A topic of the resource.
    * 
@@ -110,17 +123,21 @@ public class DublinCore {
   public DublinCore() {
 
   }
-
+  
   public List<String> getCreators() {
     return creators;
   }
-
+  
   public List<String> getDates() {
     return dates;
   }
 
   public List<String> getDescriptions() {
     return descriptions;
+  }
+
+  public List<String> getIdentifiers() {
+    return identifiers;
   }
 
   public String getLanguage() {
@@ -153,6 +170,10 @@ public class DublinCore {
 
   public void setDescriptions(List<String> descriptions) {
     this.descriptions = descriptions;
+  }
+
+  public void setIdentifiers(List<String> identifiers) {
+    this.identifiers = identifiers;
   }
 
   public void setLanguage(String language) {
