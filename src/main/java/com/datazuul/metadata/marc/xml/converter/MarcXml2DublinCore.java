@@ -3,6 +3,9 @@ package com.datazuul.metadata.marc.xml.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.marc4j.marc.DataField;
+import org.marc4j.marc.Subfield;
+
 import com.datazuul.metadata.dublincore.DublinCore;
 import com.datazuul.metadata.marc.xml.MarcXml;
 
@@ -21,6 +24,8 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
 	dc.setDates(parseDates());
 	dc.setLanguage(parseLanguage());
 	dc.setPublishers(parsePublishers());
+	dc.setTitles(parseTitles());
+	dc.setType(parseType());
 
 	return dc;
   }
@@ -35,10 +40,11 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * 110: https://www.loc.gov/marc/bibliographic/concise/bd110.html<br>
    * Corporate name used as a main entry in a bibliographic record.<br>
    * For more specific indicators see above linked documentation
-   *  
+   * 
    * <p>
    * 111: https://www.loc.gov/marc/bibliographic/concise/bd111.html<br>
-   * Meeting or conference name used as a main entry in a bibliographic record.<br>
+   * Meeting or conference name used as a main entry in a bibliographic
+   * record.<br>
    * For more specific indicators see above linked documentation
    * 
    * <p>
@@ -58,10 +64,10 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * 
    * <p>
    * 720: https://www.loc.gov/marc/bibliographic/concise/bd720.html<br>
-   * Added entry in which the name is not controlled in an authority file
-   * or list. It is also used for names that have not been formulated
-   * according to cataloging rules. Names may be of any type (e.g.,
-   * personal, corporate, meeting).<br>
+   * Added entry in which the name is not controlled in an authority file or list.
+   * It is also used for names that have not been formulated according to
+   * cataloging rules. Names may be of any type (e.g., personal, corporate,
+   * meeting).<br>
    * For more specific indicators see above linked documentation
    * 
    * <pre>
@@ -72,7 +78,7 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    *     <xsl:value-of select="."/>
    *   </dc:creator>
    * </xsl:for-each>
-    </pre>
+   * </pre>
    */
   private List<String> parseCreators() {
 	List<String> result = null;
@@ -148,14 +154,17 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
   }
 
   /**
-   * <p>260ab: https://www.loc.gov/marc/bibliographic/concise/bd260.html
+   * <p>
+   * 260ab: https://www.loc.gov/marc/bibliographic/concise/bd260.html
    * 
-   * <p>$a - Place of publication, distribution, etc. (R)
-   *  May contain the abbreviation [S.l.] when the place is unknown.
+   * <p>
+   * $a - Place of publication, distribution, etc. (R) May contain the
+   * abbreviation [S.l.] when the place is unknown.
    * 
-   * <p>$b - Name of publisher, distributor, etc. (R)
-   *  May contain the abbreviation [s.n.] when the name is unknown.
-   *  
+   * <p>
+   * $b - Name of publisher, distributor, etc. (R) May contain the abbreviation
+   * [s.n.] when the name is unknown.
+   * 
    * <pre>
    * <xsl:for-each select="marc:datafield[@tag=260]">
    *   <dc:publisher>
@@ -169,5 +178,124 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
   private List<String> parsePublishers() {
 	List<String> publishers = marcXml.getSubfieldsByTagAndCodes("260", "ab");
 	return publishers;
+  }
+
+  /**
+   * <p>
+   * 245: https://www.loc.gov/marc/bibliographic/concise/bd245.html<br>
+   * Title and statement of responsibility area of the bibliographic description
+   * of a work.<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <pre>
+   * <xsl:for-each select="marc:datafield[@tag=245]">
+   *   <dc:title>
+   *     <xsl:call-template name="subfieldSelect">
+   *       <xsl:with-param name="codes">abfghk</xsl:with-param>
+   *     </xsl:call-template>
+   *   </dc:title>
+   * </xsl:for-each>
+   * </pre>
+   */
+  private List<String> parseTitles() {
+	List<String> result = marcXml.getSubfieldsByTagAndCodes("245", "abfghk");
+	return result;
+  }
+
+  /**
+   * <p>
+   * leader: https://www.loc.gov/marc/bibliographic/concise/bdleader.html<br>
+   * Fixed field that comprises the first 24 character positions (00-23) of each
+   * bibliographic record and consists of data elements that contain numbers or
+   * coded values that define the parameters for the processing of the record.
+   * 
+   * <p>
+   * leader6 (position 7):
+   * https://www.loc.gov/marc/bibliographic/concise/bdleader.html Type of record.
+   * One-character alphabetic code used to define the characteristics and
+   * components of the record. <br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <p>
+   * leader7 (position 8):
+   * https://www.loc.gov/marc/bibliographic/concise/bdleader.html Bibliographic
+   * level.One-character alphabetic code indicating the bibliographic level of the
+   * record. <br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <p>
+   * 655: https://www.loc.gov/marc/bibliographic/concise/bd655.html<br>
+   * Terms indicating the genre, form, and/or physical characteristics of the
+   * materials being described. A genre term designates the style or technique
+   * of the intellectual content of textual materials or, for graphic materials,
+   * aspects such as vantage point, intended purpose, characteristics of the creator,
+   * publication status, or method of representation. A form term designates
+   * historically and functionally specific kinds of materials distinguished by
+   * their physical character, the subject of their intellectual content, or the
+   * order of information within them. Physical characteristic terms designate
+   * historically and functionally specific kinds of materials as distinguished by
+   * an examination of their physical character, subject of their intellectual
+   * content, or the order of information with them.<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <pre>
+   * <dc:type>
+   *   <xsl:if test="$leader7='c'">
+   *     <!--Remove attribute 6/04 jer-->
+   *     <!--<xsl:attribute name="collection">yes</xsl:attribute>-->
+   *     <xsl:text>collection</xsl:text>
+   *   </xsl:if>
+   *   <xsl:if test=
+  "$leader6='d' or $leader6='f' or $leader6='p' or $leader6='t'">
+   *     <!--Remove attribute 6/04 jer-->
+   *     <!--<xsl:attribute name="manuscript">yes</xsl:attribute>-->
+   *     <xsl:text>manuscript</xsl:text>
+   *   </xsl:if>
+   *   <xsl:choose>
+   *     <xsl:when test="$leader6='a' or $leader6='t'">text</xsl:when>
+   *     <xsl:when test="$leader6='e' or $leader6='f'">cartographic</xsl:when>
+   *     <xsl:when test="$leader6='c' or $leader6='d'">notated music</xsl:when>
+   *     <xsl:when test="$leader6='i' or $leader6='j'">sound recording</xsl:when>
+   *     <xsl:when test="$leader6='k'">still image</xsl:when>
+   *     <xsl:when test="$leader6='g'">moving image</xsl:when>
+   *     <xsl:when test="$leader6='r'">three dimensional object</xsl:when>
+   *     <xsl:when test="$leader6='m'">software, multimedia</xsl:when>
+   *     <xsl:when test="$leader6='p'">mixed material</xsl:when>
+   *   </xsl:choose>
+   * </dc:type>
+   * <xsl:for-each select="marc:datafield[@tag=655]">
+   *   <dc:type>
+   *     <xsl:value-of select="."/>
+   *   </dc:type>
+   * </xsl:for-each>
+   * </pre>
+   */
+  private String parseType() {
+	String result = "";
+	char leader6 = marcXml.getTypeOfRecord();
+	char leader7 = marcXml.getLeader(7);
+
+	if (leader7 == 'c') {
+	  result += "collection";
+	}
+	if (leader6 == 'd' || leader6 == 'f' || leader6 == 'p' || leader6 == 't') {
+	  result += "manuscript";
+	}
+	switch (leader6) {
+	case 'a', 't' -> result += "text";
+	case 'e', 'f' -> result += "cartographic";
+	case 'c', 'd' -> result += "notated music";
+	case 'i', 'j' -> result += "sound recording";
+	case 'k' -> result += "still image";
+	case 'g' -> result += "moving image";
+	case 'r' -> result += "three dimensional object";
+	case 'm' -> result += "software, multimedia";
+	case 'p' -> result += "mixed material";
+	}
+	List<String> list655 = marcXml.getSubfieldsByTagAndCodes("655", "abcvxyz");
+	if (list655 != null && !list655.isEmpty()) {
+		result += String.join(" ", list655);
+	}
+	return result;
   }
 }

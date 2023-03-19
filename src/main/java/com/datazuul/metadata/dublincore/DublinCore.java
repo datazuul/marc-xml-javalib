@@ -94,7 +94,7 @@ public class DublinCore {
    * 
    * @see <a href="http://purl.org/dc/terms/title">http://purl.org/dc/terms/title</a>
    */
-  private String title;
+  private List<String> titles;
   
   /**
    * <p><b>Definition:</b> The nature or genre of the resource.
@@ -135,8 +135,8 @@ public class DublinCore {
     return subjects;
   }
 
-  public String getTitle() {
-    return title;
+  public List<String> getTitles() {
+    return titles;
   }
 
   public String getType() {
@@ -167,8 +167,8 @@ public class DublinCore {
     this.subjects = subjects;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
+  public void setTitles(List<String> titles) {
+    this.titles = titles;
   }
 
   public void setType(String type) {

@@ -55,3 +55,4 @@ Tests are based
 ```
 
 * The Dublin Core representation of this book (<https://www.loc.gov/standards/marcxml/Sandburg/sandburgdc.xml>)
+* The XSLT-transformation output `marc21-sandburg.dc.xml` (applied `MARC21slim2OAIDC.xsl` on `marc21-sandburg.xml`)

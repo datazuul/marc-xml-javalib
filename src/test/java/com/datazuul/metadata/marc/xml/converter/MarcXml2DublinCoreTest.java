@@ -49,4 +49,16 @@ class MarcXml2DublinCoreTest {
 	List<String> publishers = dc.getPublishers();
 	assertEquals(Arrays.asList("San Diego : Harcourt Brace Jovanovich,"), publishers);
   }
+  
+  @Test
+  void testTitles() {
+	List<String> titles = dc.getTitles();
+	assertEquals(Arrays.asList("Arithmetic /"), titles);
+  }
+  
+  @Test
+  void testType() {
+	String type = dc.getType();
+	assertEquals("text", type);
+  }
 }
