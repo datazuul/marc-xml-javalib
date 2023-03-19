@@ -3,8 +3,6 @@ package com.datazuul.metadata.marc.xml.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.marc4j.marc.DataField;
-
 import com.datazuul.metadata.dublincore.DublinCore;
 import com.datazuul.metadata.marc.xml.MarcXml;
 
@@ -80,7 +78,7 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
 	List<String> result = null;
 	List<String> tags = List.of("100", "110", "111", "700", "710", "711", "720");
 	for (String tag : tags) {
-	  List<String> specifiedTagsContent = marcXml.getSubfieldsByTagAndCode(tag, "abcdefghijklmnopqrstuvwxyz");
+	  List<String> specifiedTagsContent = marcXml.getSubfieldsByTagAndCodes(tag, "abcdefghijklmnopqrstuvwxyz");
 	  if (specifiedTagsContent != null) {
 		if (result == null) {
 		  result = new ArrayList<>();
@@ -123,10 +121,10 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * Regarding original records: I use 264 only and follow RDA compliance."
    */
   private List<String> parseDates() {
-	List<String> result = marcXml.getSubfieldsByTagAndCode("260", "c");
+	List<String> result = marcXml.getSubfieldsByTagAndCodes("260", "c");
 
 	if (result == null || result.isEmpty()) {
-	  result = marcXml.getSubfieldsByTagAndCode("264", "c");
+	  result = marcXml.getSubfieldsByTagAndCodes("264", "c");
 	}
 	return result;
   }
@@ -169,15 +167,7 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parsePublishers() {
-	List<String> publishers = null;
-	List<DataField> dataFields = marcXml.getDataFieldsByTag("260");
-	for (DataField dataField : dataFields) {
-	  if (publishers == null) {
-		publishers = new ArrayList<>();
-	  }
-	  String subfields = dataField.getSubfieldsAsString("ab"); // $b - Name of publisher, distributor, etc. (R)
-	  publishers.add(subfields);
-	}
+	List<String> publishers = marcXml.getSubfieldsByTagAndCodes("260", "ab");
 	return publishers;
   }
 }

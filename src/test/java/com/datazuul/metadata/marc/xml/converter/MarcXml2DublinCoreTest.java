@@ -47,6 +47,6 @@ class MarcXml2DublinCoreTest {
   @Test
   void testPublishers() {
 	List<String> publishers = dc.getPublishers();
-	assertEquals(Arrays.asList("San Diego :Harcourt Brace Jovanovich,"), publishers);
+	assertEquals(Arrays.asList("San Diego : Harcourt Brace Jovanovich,"), publishers);
   }
 }

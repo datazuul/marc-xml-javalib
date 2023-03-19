@@ -49,7 +49,7 @@ public class MarcXml {
     return matchingDataFields;
   }
   
-  public List<String> getSubfieldsByTagAndCode(String tag, String codes) {
+  public List<String> getSubfieldsByTagAndCodes(String tag, String codes) {
 	List<String> result = null;
     List<DataField> dataFields = record.getDataFields();
     for (DataField dataField : dataFields) {
