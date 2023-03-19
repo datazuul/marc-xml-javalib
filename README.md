@@ -31,6 +31,7 @@ TODO
 ```
 DublinCore dc = marcXml.toDublinCore();
 
+List<String> dcCreators = dc.getCreators();
 List<String> dcDates = dc.getDates();
 String dcLanguage = dc.getLanguage();
 List<String> dcPublishers = dc.getPublishers();

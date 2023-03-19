@@ -28,6 +28,12 @@ class MarcXml2DublinCoreTest {
   }
 
   @Test
+  void testCreators() {
+	List<String> creators = dc.getCreators();
+	assertEquals(Arrays.asList("Sandburg, Carl, 1878-1967.", "Rand, Ted, ill."), creators);
+  }
+
+  @Test
   void testDates() {
 	List<String> dates = dc.getDates();
 	assertEquals(Arrays.asList("c1993."), dates);

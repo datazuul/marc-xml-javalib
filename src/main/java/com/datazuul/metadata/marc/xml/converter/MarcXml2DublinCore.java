@@ -19,6 +19,7 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
   public DublinCore convert() {
 	DublinCore dc = new DublinCore();
 
+	dc.setCreators(parseCreators());
 	dc.setDates(parseDates());
 	dc.setLanguage(parseLanguage());
 	dc.setPublishers(parsePublishers());
@@ -27,53 +28,67 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
   }
 
   /**
-   * <p>260ab: https://www.loc.gov/marc/bibliographic/concise/bd260.html
+   * <p>
+   * 100: https://www.loc.gov/marc/bibliographic/concise/bd100.html<br>
+   * Personal name used as a main entry in a bibliographic record.<br>
+   * For more specific indicators see above linked documentation
    * 
-   * <p>$a - Place of publication, distribution, etc. (R)
-   *  May contain the abbreviation [S.l.] when the place is unknown.
-   * 
-   * <p>$b - Name of publisher, distributor, etc. (R)
-   *  May contain the abbreviation [s.n.] when the name is unknown.
+   * <p>
+   * 110: https://www.loc.gov/marc/bibliographic/concise/bd110.html<br>
+   * Corporate name used as a main entry in a bibliographic record.<br>
+   * For more specific indicators see above linked documentation
    *  
-   * <pre>
-   * <xsl:for-each select="marc:datafield[@tag=260]">
-   *   <dc:publisher>
-   *     <xsl:call-template name="subfieldSelect">
-   *       <xsl:with-param name="codes">ab</xsl:with-param>
-   *     </xsl:call-template>
-   *   </dc:publisher>
-   * </xsl:for-each>
-   * </pre>
-   */
-  private List<String> parsePublishers() {
-	List<String> publishers = null;
-	List<DataField> dataFields = marcXml.getDataFieldsByTag("260");
-	for (DataField dataField : dataFields) {
-	  if (publishers == null) {
-		publishers = new ArrayList<>();
-	  }
-	  String subfields = dataField.getSubfieldsAsString("ab"); // $b - Name of publisher, distributor, etc. (R)
-	  publishers.add(subfields);
-	}
-	return publishers;
-  }
-
-  /**
    * <p>
-   * 008 all: https://www.loc.gov/marc/bibliographic/concise/bd008a.html
+   * 111: https://www.loc.gov/marc/bibliographic/concise/bd111.html<br>
+   * Meeting or conference name used as a main entry in a bibliographic record.<br>
+   * For more specific indicators see above linked documentation
    * 
    * <p>
-   * 35-37 - Language<br>
-   * Three-character alphabetic code that indicates the language of the item. Code
-   * from: MARC Code List for Languages. Choice of a MARC code is based on the
-   * predominant language of the item. Three fill characters (|||) may also be
-   * used if no attempt is made to code the language or if only non-MARC language
-   * coding is preferred (and coded in field 041 (Language code)).
+   * 700: https://www.loc.gov/marc/bibliographic/concise/bd700.html<br>
+   * Added entry in which the entry element is a personal name.<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <p>
+   * 710: https://www.loc.gov/marc/bibliographic/concise/bd710.html<br>
+   * Added entry in which the entry element is a corporate name.<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <p>
+   * 711: https://www.loc.gov/marc/bibliographic/concise/bd711.html<br>
+   * Added entry in which the entry element is a meeting name.<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <p>
+   * 720: https://www.loc.gov/marc/bibliographic/concise/bd720.html<br>
+   * Added entry in which the name is not controlled in an authority file
+   * or list. It is also used for names that have not been formulated
+   * according to cataloging rules. Names may be of any type (e.g.,
+   * personal, corporate, meeting).<br>
+   * For more specific indicators see above linked documentation
+   * 
+   * <pre>
+   * <xsl:for-each select="marc:datafield[@tag=100]|marc:datafield[@tag=110]
+   * |marc:datafield[@tag=111]|marc:datafield[@tag=700]|marc:datafield[@tag=710]
+   * |marc:datafield[@tag=711]|marc:datafield[@tag=720]">
+   *   <dc:creator>
+   *     <xsl:value-of select="."/>
+   *   </dc:creator>
+   * </xsl:for-each>
+    </pre>
    */
-  private String parseLanguage() {
-	String data = marcXml.getControlFieldByTag("008");
-	String lang = data.substring(35, 38);
-	return lang;
+  private List<String> parseCreators() {
+	List<String> result = null;
+	List<String> tags = List.of("100", "110", "111", "700", "710", "711", "720");
+	for (String tag : tags) {
+	  List<String> specifiedTagsContent = marcXml.getSubfieldsByTagAndCode(tag, "abcdefghijklmnopqrstuvwxyz");
+	  if (specifiedTagsContent != null) {
+		if (result == null) {
+		  result = new ArrayList<>();
+		}
+		result.addAll(specifiedTagsContent);
+	  }
+	}
+	return result;
   }
 
   /**
@@ -114,5 +129,55 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
 	  result = marcXml.getSubfieldsByTagAndCode("264", "c");
 	}
 	return result;
+  }
+
+  /**
+   * <p>
+   * 008 all: https://www.loc.gov/marc/bibliographic/concise/bd008a.html
+   * 
+   * <p>
+   * 35-37 - Language<br>
+   * Three-character alphabetic code that indicates the language of the item. Code
+   * from: MARC Code List for Languages. Choice of a MARC code is based on the
+   * predominant language of the item. Three fill characters (|||) may also be
+   * used if no attempt is made to code the language or if only non-MARC language
+   * coding is preferred (and coded in field 041 (Language code)).
+   */
+  private String parseLanguage() {
+	String data = marcXml.getControlFieldByTag("008");
+	String lang = data.substring(35, 38);
+	return lang;
+  }
+
+  /**
+   * <p>260ab: https://www.loc.gov/marc/bibliographic/concise/bd260.html
+   * 
+   * <p>$a - Place of publication, distribution, etc. (R)
+   *  May contain the abbreviation [S.l.] when the place is unknown.
+   * 
+   * <p>$b - Name of publisher, distributor, etc. (R)
+   *  May contain the abbreviation [s.n.] when the name is unknown.
+   *  
+   * <pre>
+   * <xsl:for-each select="marc:datafield[@tag=260]">
+   *   <dc:publisher>
+   *     <xsl:call-template name="subfieldSelect">
+   *       <xsl:with-param name="codes">ab</xsl:with-param>
+   *     </xsl:call-template>
+   *   </dc:publisher>
+   * </xsl:for-each>
+   * </pre>
+   */
+  private List<String> parsePublishers() {
+	List<String> publishers = null;
+	List<DataField> dataFields = marcXml.getDataFieldsByTag("260");
+	for (DataField dataField : dataFields) {
+	  if (publishers == null) {
+		publishers = new ArrayList<>();
+	  }
+	  String subfields = dataField.getSubfieldsAsString("ab"); // $b - Name of publisher, distributor, etc. (R)
+	  publishers.add(subfields);
+	}
+	return publishers;
   }
 }

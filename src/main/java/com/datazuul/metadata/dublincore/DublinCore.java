@@ -19,6 +19,17 @@ import java.util.List;
 public class DublinCore {
 
   /**
+   * <p><b>Definition:</b> An entity responsible for making the resource.
+   * 
+   * <p><b>Comment:</b> Recommended practice is to identify the creator with a URI.
+   *  If this is not possible or feasible, a literal value that identifies
+   *  the creator may be provided.
+   * 
+   * @see <a href="http://purl.org/dc/terms/creator">http://purl.org/dc/terms/creator</a>
+   */
+  private List<String> creators;
+
+  /**
    * <p><b>Definition:</b> A point or period of time associated with an event
    *  in the lifecycle of the resource.
    * 
@@ -37,16 +48,6 @@ public class DublinCore {
    */
   private List<String> dates;
   
-  /**
-   * <p><b>Definition:</b> An entity responsible for making the resource.
-   * 
-   * <p><b>Comment:</b> Recommended practice is to identify the creator with a URI.
-   *  If this is not possible or feasible, a literal value that identifies
-   *  the creator may be provided.
-   * 
-   * @see <a href="http://purl.org/dc/terms/creator">http://purl.org/dc/terms/creator</a>
-   */
-  private List<String> creators;
   
   /**
    * <p><b>Definition:</b> An account of the resource.
@@ -110,12 +111,12 @@ public class DublinCore {
 
   }
 
-  public List<String> getDates() {
-    return dates;
-  }
-
   public List<String> getCreators() {
     return creators;
+  }
+
+  public List<String> getDates() {
+    return dates;
   }
 
   public List<String> getDescriptions() {
@@ -142,12 +143,12 @@ public class DublinCore {
     return type;
   }
 
-  public void setDates(List<String> dates) {
-    this.dates = dates;
-  }
-
   public void setCreators(List<String> creators) {
     this.creators = creators;
+  }
+
+  public void setDates(List<String> dates) {
+    this.dates = dates;
   }
 
   public void setDescriptions(List<String> descriptions) {

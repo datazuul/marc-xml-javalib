@@ -49,12 +49,12 @@ public class MarcXml {
     return matchingDataFields;
   }
   
-  public List<String> getSubfieldsByTagAndCode(String tag, String code) {
+  public List<String> getSubfieldsByTagAndCode(String tag, String codes) {
 	List<String> result = null;
     List<DataField> dataFields = record.getDataFields();
     for (DataField dataField : dataFields) {
       if (tag.equals(dataField.getTag())) {
-        List<Subfield> subfields = dataField.getSubfields(code);
+        List<Subfield> subfields = dataField.getSubfields(codes);
         // inside one datafield: concatenate subfields data
         String data = concatenate(subfields, " ");
         
