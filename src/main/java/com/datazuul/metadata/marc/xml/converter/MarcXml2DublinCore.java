@@ -12,25 +12,25 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
   private MarcXml marcXml;
 
   public MarcXml2DublinCore(MarcXml marcXml) {
-	this.marcXml = marcXml;
+    this.marcXml = marcXml;
   }
 
   @Override
   public DublinCore convert() {
-	DublinCore dc = new DublinCore();
+    DublinCore dc = new DublinCore();
 
-	dc.setCreators(parseCreators());
-	dc.setDates(parseDates());
-	dc.setDescriptions(parseDescriptions());
+    dc.setCreators(parseCreators());
+    dc.setDates(parseDates());
+    dc.setDescriptions(parseDescriptions());
 //	dc.setFormat(null);
-	dc.setIdentifiers(parseIdentifiers());
-	dc.setLanguage(parseLanguage());
-	dc.setPublishers(parsePublishers());
-	dc.setSubjects(null);
-	dc.setTitles(parseTitles());
-	dc.setType(parseType());
+    dc.setIdentifiers(parseIdentifiers());
+    dc.setLanguage(parseLanguage());
+    dc.setPublishers(parsePublishers());
+    dc.setSubjects(null);
+    dc.setTitles(parseTitles());
+    dc.setType(parseType());
 
-	return dc;
+    return dc;
   }
 
   /**
@@ -84,18 +84,18 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parseCreators() {
-	List<String> result = null;
-	List<String> tags = List.of("100", "110", "111", "700", "710", "711", "720");
-	for (String tag : tags) {
-	  List<String> specifiedTagsContent = marcXml.getSubfieldsByTagAndCodes(tag, "abcdefghijklmnopqrstuvwxyz");
-	  if (specifiedTagsContent != null) {
-		if (result == null) {
-		  result = new ArrayList<>();
-		}
-		result.addAll(specifiedTagsContent);
-	  }
-	}
-	return result;
+    List<String> result = null;
+    List<String> tags = List.of("100", "110", "111", "700", "710", "711", "720");
+    for (String tag : tags) {
+      List<String> specifiedTagsContent = marcXml.getSubfieldsByTagAndCodes(tag, "abcdefghijklmnopqrstuvwxyz");
+      if (specifiedTagsContent != null) {
+        if (result == null) {
+          result = new ArrayList<>();
+        }
+        result.addAll(specifiedTagsContent);
+      }
+    }
+    return result;
   }
 
   /**
@@ -130,30 +130,33 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * Regarding original records: I use 264 only and follow RDA compliance."
    */
   private List<String> parseDates() {
-	List<String> result = marcXml.getSubfieldsByTagAndCodes("260", "c");
+    List<String> result = marcXml.getSubfieldsByTagAndCodes("260", "c");
 
-	if (result == null || result.isEmpty()) {
-	  result = marcXml.getSubfieldsByTagAndCodes("264", "c");
-	}
-	return result;
+    if (result == null || result.isEmpty()) {
+      result = marcXml.getSubfieldsByTagAndCodes("264", "c");
+    }
+    return result;
   }
 
   /**
    * <p>
    * 520: https://www.loc.gov/marc/bibliographic/concise/bd520.html<br>
-   * Unformatted information that describes the scope and general contents of the materials.<br>
-   * This could be a summary, abstract, annotation, review, or only a phrase describing the material.<br>
-   * The level of detail appropriate in a summary may vary depending on the audience for a
-   * particular product. When a distinction between levels of detail is required, a brief summary
-   * is given in subfield $a and a fuller annotation is given in subfield $b.<br>
-   * The text is sometimes displayed and/or printed with an introductory term that is generated
-   * as a display constant based on the first indicator value.<br>
+   * Unformatted information that describes the scope and general contents of the
+   * materials.<br>
+   * This could be a summary, abstract, annotation, review, or only a phrase
+   * describing the material.<br>
+   * The level of detail appropriate in a summary may vary depending on the
+   * audience for a particular product. When a distinction between levels of
+   * detail is required, a brief summary is given in subfield $a and a fuller
+   * annotation is given in subfield $b.<br>
+   * The text is sometimes displayed and/or printed with an introductory term that
+   * is generated as a display constant based on the first indicator value.<br>
    * $a - Summary, etc. (NR)
    * 
    * <p>
    * 521: https://www.loc.gov/marc/bibliographic/concise/bd521.html<br>
-   * Information that identifies the specific audience or intellectual level for which the content of
-   * the described item is considered appropriate.<br>
+   * Information that identifies the specific audience or intellectual level for
+   * which the content of the described item is considered appropriate.<br>
    * $a - Target audience note (R)
    * 
    * <pre>
@@ -167,7 +170,8 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    *     <xsl:value-of select="marc:subfield[@code='a']"/>
    *   </dc:description>
    * </xsl:for-each>
-   * <xsl:for-each select="marc:datafield[500&lt;= @tag and @tag&lt;= 599 ][not(@tag=506 or @tag=530 or @tag=540 or @tag=546)]">
+   * <xsl:for-each select=
+  "marc:datafield[500&lt;= @tag and @tag&lt;= 599 ][not(@tag=506 or @tag=530 or @tag=540 or @tag=546)]">
    *   <dc:description>
    *     <xsl:value-of select="marc:subfield[@code='a']"/>
    *   </dc:description>
@@ -175,37 +179,41 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parseDescriptions() {
-	List<String> result = new ArrayList<>();
-	List<String> subfields520a = marcXml.getSubfieldsByTagAndCodes("520", "a");
-	if (subfields520a != null) {
-	  result.addAll(subfields520a);
-	}
-	List<String> subfields521a = marcXml.getSubfieldsByTagAndCodes("521", "a");
-	if (subfields521a != null) {
-	  result.addAll(subfields521a);
-	}
-	// also exclude 520 and 521 (differs from above xsl)
-	List<Integer> excludes = Arrays.asList(506, 520, 521, 530, 540, 546);
-	for (int i = 500; i <= 599; i++) {
-	  if (!excludes.contains(i)) {
-		List<String> subfieldData = marcXml.getSubfieldsByTagAndCodes("" +i, "a");
-		if (subfieldData != null) {
-		  result.addAll(subfieldData);
-		}
-	  }
-	}
-	if (result.isEmpty()) {
-	  return null;
-	}
-	return result;
+    List<String> result = new ArrayList<>();
+    List<String> subfields520a = marcXml.getSubfieldsByTagAndCodes("520", "a");
+    if (subfields520a != null) {
+      result.addAll(subfields520a);
+    }
+    List<String> subfields521a = marcXml.getSubfieldsByTagAndCodes("521", "a");
+    if (subfields521a != null) {
+      result.addAll(subfields521a);
+    }
+    // also exclude 520 and 521 (differs from above xsl)
+    List<Integer> excludes = Arrays.asList(506, 520, 521, 530, 540, 546);
+    for (int i = 500; i <= 599; i++) {
+      if (!excludes.contains(i)) {
+        List<String> subfieldData = marcXml.getSubfieldsByTagAndCodes("" + i, "a");
+        if (subfieldData != null) {
+          result.addAll(subfieldData);
+        }
+      }
+    }
+    if (result.isEmpty()) {
+      return null;
+    }
+    return result;
   }
 
   /**
    * <p>
    * 856: https://www.loc.gov/marc/bibliographic/concise/bd856.html<br>
    * $u - Uniform Resource Identifier (R)<br>
-    Uniform Resource Identifier (URI), which provides standard syntax for locating an object using existing Internet protocols or by resolution of a persistent identifier (PID). Field 856 is structured to allow for the creation of a URL from the concatenation of other separate 856 subfields. Subfield $u may be used instead of those separate subfields or in addition to them.
-    Subfield $u may be repeated if more than one URI is recorded.
+   * Uniform Resource Identifier (URI), which provides standard syntax for
+   * locating an object using existing Internet protocols or by resolution of a
+   * persistent identifier (PID). Field 856 is structured to allow for the
+   * creation of a URL from the concatenation of other separate 856 subfields.
+   * Subfield $u may be used instead of those separate subfields or in addition to
+   * them. Subfield $u may be repeated if more than one URI is recorded.
    * 
    * <p>
    * 020: https://www.loc.gov/marc/bibliographic/concise/bd020.html<br>
@@ -227,22 +235,22 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parseIdentifiers() {
-	List<String> uris = marcXml.getSubfieldsByTagAndCodes("856", "u");
-	List<String> isbns = marcXml.getSubfieldsByTagAndCodes("020", "a");
-	if (isbns != null) {
-	  isbns = isbns.stream().map(i -> "URN:ISBN:" + i).collect(Collectors.toList());
-	}
-	List<String> result = null;
-	if (uris != null || isbns != null) {
-	  result = new ArrayList<>();
-	}
-	if (uris != null) {
-	  result.addAll(uris);
-	}
-	if (isbns != null) {
-	  result.addAll(isbns);
-	}
-	return result;
+    List<String> uris = marcXml.getSubfieldsByTagAndCodes("856", "u");
+    List<String> isbns = marcXml.getSubfieldsByTagAndCodes("020", "a");
+    if (isbns != null) {
+      isbns = isbns.stream().map(i -> "URN:ISBN:" + i).collect(Collectors.toList());
+    }
+    List<String> result = null;
+    if (uris != null || isbns != null) {
+      result = new ArrayList<>();
+    }
+    if (uris != null) {
+      result.addAll(uris);
+    }
+    if (isbns != null) {
+      result.addAll(isbns);
+    }
+    return result;
   }
 
   /**
@@ -258,14 +266,13 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * coding is preferred (and coded in field 041 (Language code)).
    * 
    * <pre>
-   * <dc:language>
-   *   <xsl:value-of select="substring($controlField008,36,3)"/>
+   * <dc:language> <xsl:value-of select="substring($controlField008,36,3)"/>
    * </dc:language>
    */
   private String parseLanguage() {
-	String data = marcXml.getControlFieldByTag("008");
-	String lang = data.substring(35, 38);
-	return lang;
+    String data = marcXml.getControlFieldByTag("008");
+    String lang = data.substring(35, 38);
+    return lang;
   }
 
   /**
@@ -291,8 +298,8 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parsePublishers() {
-	List<String> publishers = marcXml.getSubfieldsByTagAndCodes("260", "ab");
-	return publishers;
+    List<String> publishers = marcXml.getSubfieldsByTagAndCodes("260", "ab");
+    return publishers;
   }
 
   /**
@@ -313,8 +320,8 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private List<String> parseTitles() {
-	List<String> result = marcXml.getSubfieldsByTagAndCodes("245", "abfghk");
-	return result;
+    List<String> result = marcXml.getSubfieldsByTagAndCodes("245", "abfghk");
+    return result;
   }
 
   /**
@@ -341,16 +348,16 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * <p>
    * 655: https://www.loc.gov/marc/bibliographic/concise/bd655.html<br>
    * Terms indicating the genre, form, and/or physical characteristics of the
-   * materials being described. A genre term designates the style or technique
-   * of the intellectual content of textual materials or, for graphic materials,
-   * aspects such as vantage point, intended purpose, characteristics of the creator,
-   * publication status, or method of representation. A form term designates
-   * historically and functionally specific kinds of materials distinguished by
-   * their physical character, the subject of their intellectual content, or the
-   * order of information within them. Physical characteristic terms designate
-   * historically and functionally specific kinds of materials as distinguished by
-   * an examination of their physical character, subject of their intellectual
-   * content, or the order of information with them.<br>
+   * materials being described. A genre term designates the style or technique of
+   * the intellectual content of textual materials or, for graphic materials,
+   * aspects such as vantage point, intended purpose, characteristics of the
+   * creator, publication status, or method of representation. A form term
+   * designates historically and functionally specific kinds of materials
+   * distinguished by their physical character, the subject of their intellectual
+   * content, or the order of information within them. Physical characteristic
+   * terms designate historically and functionally specific kinds of materials as
+   * distinguished by an examination of their physical character, subject of their
+   * intellectual content, or the order of information with them.<br>
    * For more specific indicators see above linked documentation
    * 
    * <pre>
@@ -386,31 +393,31 @@ public class MarcXml2DublinCore implements MarcXmlConverter<DublinCore> {
    * </pre>
    */
   private String parseType() {
-	String result = "";
-	char leader6 = marcXml.getTypeOfRecord();
-	char leader7 = marcXml.getLeader(7);
+    String result = "";
+    char leader6 = marcXml.getTypeOfRecord();
+    char leader7 = marcXml.getLeader(7);
 
-	if (leader7 == 'c') {
-	  result += "collection";
-	}
-	if (leader6 == 'd' || leader6 == 'f' || leader6 == 'p' || leader6 == 't') {
-	  result += "manuscript";
-	}
-	switch (leader6) {
-	case 'a', 't' -> result += "text";
-	case 'e', 'f' -> result += "cartographic";
-	case 'c', 'd' -> result += "notated music";
-	case 'i', 'j' -> result += "sound recording";
-	case 'k' -> result += "still image";
-	case 'g' -> result += "moving image";
-	case 'r' -> result += "three dimensional object";
-	case 'm' -> result += "software, multimedia";
-	case 'p' -> result += "mixed material";
-	}
-	List<String> list655 = marcXml.getSubfieldsByTagAndCodes("655", "abcvxyz");
-	if (list655 != null && !list655.isEmpty()) {
-		result += String.join(" ", list655);
-	}
-	return result;
+    if (leader7 == 'c') {
+      result += "collection";
+    }
+    if (leader6 == 'd' || leader6 == 'f' || leader6 == 'p' || leader6 == 't') {
+      result += "manuscript";
+    }
+    switch (leader6) {
+    case 'a', 't' -> result += "text";
+    case 'e', 'f' -> result += "cartographic";
+    case 'c', 'd' -> result += "notated music";
+    case 'i', 'j' -> result += "sound recording";
+    case 'k' -> result += "still image";
+    case 'g' -> result += "moving image";
+    case 'r' -> result += "three dimensional object";
+    case 'm' -> result += "software, multimedia";
+    case 'p' -> result += "mixed material";
+    }
+    List<String> list655 = marcXml.getSubfieldsByTagAndCodes("655", "abcvxyz");
+    if (list655 != null && !list655.isEmpty()) {
+      result += String.join(" ", list655);
+    }
+    return result;
   }
 }

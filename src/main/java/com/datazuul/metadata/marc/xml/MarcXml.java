@@ -27,57 +27,57 @@ import com.datazuul.metadata.marc.xml.converter.MarcXml2DublinCore;
 public class MarcXml {
 
   public static String concatenate(List<Subfield> subfields, String delimiter) {
-	StringBuilder sb = new StringBuilder();
-	for (Subfield subfield : subfields) {
-	  final String data = subfield.getData();
-	  if (data != null && !data.isBlank()) {
-		sb.append(data).append(delimiter);
-	  }
-	}
-	String result = sb.toString().trim();
-	return result;
+    StringBuilder sb = new StringBuilder();
+    for (Subfield subfield : subfields) {
+      final String data = subfield.getData();
+      if (data != null && !data.isBlank()) {
+        sb.append(data).append(delimiter);
+      }
+    }
+    String result = sb.toString().trim();
+    return result;
   }
 
   private final Record record;
 
   public MarcXml(Record record) {
-	this.record = record;
+    this.record = record;
   }
 
   public String getControlFieldByTag(String tag) {
-	return record.getControlFields().stream().filter(cf -> tag.equals(cf.getTag())).findFirst().orElse(null).getData();
+    return record.getControlFields().stream().filter(cf -> tag.equals(cf.getTag())).findFirst().orElse(null).getData();
   }
 
   public List<DataField> getDataFieldsByTag(String tag) {
-	List<DataField> dataFields = record.getDataFields();
-	List<DataField> matchingDataFields = dataFields.stream().filter(df -> tag.equals(df.getTag())).collect(Collectors.toList());
-	return matchingDataFields;
+    List<DataField> dataFields = record.getDataFields();
+    List<DataField> matchingDataFields = dataFields.stream().filter(df -> tag.equals(df.getTag()))
+        .collect(Collectors.toList());
+    return matchingDataFields;
   }
 
   /**
-   * Get character in leader element on given position.
-   * (Index starts at 0).
+   * Get character in leader element on given position. (Index starts at 0).
    */
   public char getLeader(int pos) {
-	char[] leaderChars = record.getLeader().toString().toCharArray();
-	return leaderChars[pos];
+    char[] leaderChars = record.getLeader().toString().toCharArray();
+    return leaderChars[pos];
   }
-  
-  public List<String> getSubfieldsByTagAndCodes(String tag, String codes) {
-	List<String> result = null;
-	List<DataField> dataFields = getDataFieldsByTag(tag);
-	for (DataField dataField : dataFields) {
-	  List<Subfield> subfields = dataField.getSubfields(codes);
-	  // inside one datafield: concatenate subfields data
-	  String data = concatenate(subfields, " ");
 
-	  // add subfields data of datafield to list
-	  if (result == null) {
-		result = new ArrayList<>();
-	  }
-	  result.add(data);
-	}
-	return result;
+  public List<String> getSubfieldsByTagAndCodes(String tag, String codes) {
+    List<String> result = null;
+    List<DataField> dataFields = getDataFieldsByTag(tag);
+    for (DataField dataField : dataFields) {
+      List<Subfield> subfields = dataField.getSubfields(codes);
+      // inside one datafield: concatenate subfields data
+      String data = concatenate(subfields, " ");
+
+      // add subfields data of datafield to list
+      if (result == null) {
+        result = new ArrayList<>();
+      }
+      result.add(data);
+    }
+    return result;
   }
 
   /**
@@ -91,60 +91,62 @@ public class MarcXml {
    * May contain the abbreviation [S.l.] when the place is unknown.
    */
   public List<String> getPublicationPlaces() {
-	return getSubfieldsByTagAndCodes("260", "a");
+    return getSubfieldsByTagAndCodes("260", "a");
   }
 
   /**
    * <p>
-   * 250:  https://www.loc.gov/marc/bibliographic/bd250.html<br>
-   * Information relating to the edition of a work as determined by applicable cataloging rules.
+   * 250: https://www.loc.gov/marc/bibliographic/bd250.html<br>
+   * Information relating to the edition of a work as determined by applicable
+   * cataloging rules.
    * 
    * <p>
    * $a - Edition statement (NR)<br>
    * $b - Remainder of edition statement (NR)<br>
-   * Usually, a statement of personal or corporate responsibility and/or a parallel edition statement.
+   * Usually, a statement of personal or corporate responsibility and/or a
+   * parallel edition statement.
    */
   public List<String> getEditionStatements() {
-	return getSubfieldsByTagAndCodes("250", "ab");
+    return getSubfieldsByTagAndCodes("250", "ab");
   }
 
   public Set<String> getIdentifiers() {
-	Set<String> identifiers = new HashSet<>();
-	List<DataField> dataFields = record.getDataFields();
-	for (DataField dataField : dataFields) {
-	  if ("035".equals(dataField.getTag())) {
-		Subfield subfield = dataField.getSubfield('a');
-		if (subfield != null) {
-		  String identifier = subfield.getData();
-		  identifiers.add(identifier);
-		} else {
-		  // "9" happened to be in LOC data: https://lccn.loc.gov/12027826/marcxml
-		  subfield = dataField.getSubfield('9');
-		  if (subfield != null) {
-			String identifier = subfield.getData();
-			identifiers.add(identifier);
-		  }
-		}
-	  }
-	}
-	return identifiers;
+    Set<String> identifiers = new HashSet<>();
+    List<DataField> dataFields = record.getDataFields();
+    for (DataField dataField : dataFields) {
+      if ("035".equals(dataField.getTag())) {
+        Subfield subfield = dataField.getSubfield('a');
+        if (subfield != null) {
+          String identifier = subfield.getData();
+          identifiers.add(identifier);
+        } else {
+          // "9" happened to be in LOC data: https://lccn.loc.gov/12027826/marcxml
+          subfield = dataField.getSubfield('9');
+          if (subfield != null) {
+            String identifier = subfield.getData();
+            identifiers.add(identifier);
+          }
+        }
+      }
+    }
+    return identifiers;
   }
 
   public Record getRecord() {
-	return record;
+    return record;
   }
 
   /**
-   * leader6: https://www.loc.gov/marc/bibliographic/concise/bdleader.html
-   * Type of record. One-character alphabetic code used to define the
-   * characteristics and components of the record.
+   * leader6: https://www.loc.gov/marc/bibliographic/concise/bdleader.html Type of
+   * record. One-character alphabetic code used to define the characteristics and
+   * components of the record.
    */
   public char getTypeOfRecord() {
-	return record.getLeader().getTypeOfRecord();
+    return record.getLeader().getTypeOfRecord();
   }
-  
+
   public DublinCore toDublinCore() {
-	MarcXml2DublinCore marcXml2DublinCore = new MarcXml2DublinCore(this);
-	return marcXml2DublinCore.convert();
+    MarcXml2DublinCore marcXml2DublinCore = new MarcXml2DublinCore(this);
+    return marcXml2DublinCore.convert();
   }
 }
